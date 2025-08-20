@@ -1,6 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
 
+@dataclass
 class AutoITParams:
     it_min_ms: float
     it_max_ms: float
