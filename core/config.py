@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 import yaml
 import os
 from pathlib import Path
@@ -13,6 +13,10 @@ class SerialConfig:
     baudrate_cube = 19200
     baudrate_relay = 9600
     timeout_sec = 1.0
+
+@dataclass
+class AvantesConfig:
+    dll_path = None
 
 @dataclass
 class LaserSpec:
@@ -47,6 +51,7 @@ class OutputConfig:
 @dataclass
 class AppConfig:
     serial: SerialConfig = field(default_factory=SerialConfig)
+    avantes: AvantesConfig = field(default_factory=AvantesConfig)
     lasers: List[LaserSpec] = field(default_factory=list)
     measure: MeasureConfig = field(default_factory=MeasureConfig)
     output: OutputConfig = field(default_factory=OutputConfig)
@@ -78,6 +83,7 @@ def save_config(cfg: AppConfig, path: str | os.PathLike) -> None:
 
 def _from_dict(d: Dict[str, Any]) -> AppConfig:
     serial = SerialConfig(**d.get('serial', {}))
+    avantes = AvantesConfig(**d.get("avantes", {}))
     measure = MeasureConfig(**d.get('measure',{}))
     output = OutputConfig(**d.get("output", {}))
     lasers = []
@@ -88,6 +94,7 @@ def _from_dict(d: Dict[str, Any]) -> AppConfig:
 def _to_dict(cfg: AppConfig) -> Dict[str, Any]:
     return {
         'serial': vars(cfg.serial),
+        "avantes": vars(cfg.avantes),
         'measure': vars(cfg.measure),
         'output': vars(cfg.output),
         'lasers': [vars(l) for l in cfg.lasers]
