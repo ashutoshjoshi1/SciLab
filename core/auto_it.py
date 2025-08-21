@@ -1,5 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
+from typing import Tuple
 
 @dataclass
 class AutoITParams:
@@ -16,7 +17,7 @@ class AutoIT:
     def __init__(self, params: AutoITParams):
         self.p = params
 
-    def tune(self, read_peak, set_it, start_it_ms: float, on_progress = None) -> tuple[float, float, bool]:
+    def tune(self, read_peak, set_it, start_it_ms: float, on_progress = None) -> Tuple[float, float, bool]:
         it = float(np.clip(start_it_ms, self.p.it_min_ms, self.p.it_max_ms))
         target_mid = 0.5* (self.p.target_low + self.p.target_high)
         peak = np.nan

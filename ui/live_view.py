@@ -11,9 +11,9 @@ class LiveView(QWidget):
         super().__init__(parent)
         self.layout = QVBoxLayout(self)
         self.web = QWebEngineView(self)
-        self.layout.addWidget(self.web)
+        self.layout.addWidget(self.web, 1) # Set stretch factor to 1
         self._fig = go.Figure()
-        self._fig.update_layout(height=700, title_text="Live Spectrum")
+        self._fig.update_layout(title_text="Live Spectrum")
         self._fig.add_trace(go.Scatter(y=[0], mode="lines", name="spectrum"))
         self._push_fig()
 

@@ -1,4 +1,5 @@
 import sys, traceback
+from typing import Union
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
@@ -50,8 +51,8 @@ class MainWindow(QWidget):
         self.measurement_started.connect(self.plan.on_measurement_started)
         self.measurement_finished.connect(self.plan.on_measurement_finished)
 
-        self._thread: QThread | None = None
-        self._worker: MeasureWorker | None = None
+        self._thread: Union[QThread, None] = None
+        self._worker: Union[MeasureWorker, None] = None
         self._cfg = cfg
 
     def start_measurement(self):

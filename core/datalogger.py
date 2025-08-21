@@ -32,7 +32,7 @@ class DataLogger:
         with open(self.paths.meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, indent=2)
 
-    def add_frame(self, timestamp: str, laser_id: str, cycle_type: str, cycle_idx: int, integration_ms: float, pixels: list[float]):
+    def add_frame(self, timestamp: str, laser_id: str, cycle_type: str, cycle_idx: int, integration_ms: float, pixels: List[float]):
         row: Dict[str, Any] = {
             "Timestamp": timestamp,
             "LaserID": laser_id,

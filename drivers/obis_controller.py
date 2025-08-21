@@ -1,6 +1,6 @@
 import serial
 import time
-from typing import Optional
+from typing import Optional, List
 
 class ObisController:
     def __init__(self, port: str, baudrate = 115200, timeout = 1.0):
@@ -21,7 +21,7 @@ class ObisController:
                 pass
         self.ser = None
     
-    def _send(self, cmd: str) -> list[str]:
+    def _send(self, cmd: str) -> List[str]:
         if not self.ser:
             raise RuntimeError("OBIS not Connected")
         self.ser.write((cmd + '\r\n').encode())
