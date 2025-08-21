@@ -1,6 +1,8 @@
 import sys, traceback
 from typing import Union
+from pathlib import Path
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget, QMessageBox
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 from ..core.config import AppConfig, DEFAULT_CONFIG, load_config
@@ -35,6 +37,8 @@ class MainWindow(QWidget):
     def __init__(self, cfg: AppConfig):
         super().__init__()
         self.setWindowTitle("SciLab")
+        icon_path = Path(__file__).parent.parent / "assets" / "sciglob_symbol.ico"
+        self.setWindowIcon(QIcon(str(icon_path)))
         layout = QVBoxLayout(self)
         tabs = QTabWidget(self)
         layout.addWidget(tabs)
