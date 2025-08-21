@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget, QMes
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 from ..core.config import AppConfig, DEFAULT_CONFIG, load_config
+from ..core.port_autodetect import autodetect_ports
 from ..core.measurement import MeasurementRunner
 from .run_plan_widget import RunPlanWidget
 from .live_view import LiveView
@@ -27,6 +28,9 @@ class MeasureWorker(QObject):
             self.errored.emit(f"{e}\n{tb}")
 
 class MainWindow(QWidget):
+    measurement_started = pyqtSignal()
+    measurement_finished = pyqtSignal()
+
     def __init__(self, cfg: AppConfig):
         super().__init__()
         self.setWindowTitle("SciLab")
@@ -43,6 +47,8 @@ class MainWindow(QWidget):
         tabs.addTab(self.analysis, "Analysis")
 
         self.plan.startClicked.connect(self.start_measurement)
+        self.measurement_started.connect(self.plan.on_measurement_started)
+        self.measurement_finished.connect(self.plan.on_measurement_finished)
 
         self._thread: QThread | None = None
         self._worker: MeasureWorker | None = None
@@ -52,6 +58,8 @@ class MainWindow(QWidget):
         if self._thread:
             QMessageBox.warning(self, "Busy", "Measurement already running.")
             return
+        
+        self.measurement_started.emit()
         self._thread = QThread(self)
         self._worker = MeasureWorker(self._cfg)
         self._worker.moveToThread(self._thread)
@@ -75,12 +83,19 @@ class MainWindow(QWidget):
             self._thread.wait()
         self._thread = None
         self._worker = None
+        self.measurement_finished.emit()
 
 def main():
     try:
         cfg = load_config("SciLab.yaml") #if it is present
     except Exception:
         cfg = DEFAULT_CONFIG
+    
+    detected_ports = autodetect_ports()
+    if detected_ports["obis_port"]:
+        cfg.serial.obis_port = detected_ports["obis_port"]
+    if detected_ports["cube_port"]:
+        cfg.serial.cube_port = detected_ports["cube_port"]
 
     app = QApplication(sys.argv)
     w = MainWindow(cfg)

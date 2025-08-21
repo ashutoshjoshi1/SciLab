@@ -37,6 +37,10 @@ class ObisController:
 
     def set_power_w(self, channel: int, watts: float):
         self._send(f"SOUR{channel}:POW:LEV:IMM:AMPL {watts:.3f}")
-        
-
-        
+    
+    def is_present(self) -> bool:
+        try:
+            res = self._send("IDN?")
+            return "OBIS" in "".join(res)
+        except Exception:
+            return False

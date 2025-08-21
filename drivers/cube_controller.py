@@ -36,3 +36,10 @@ class CubeController:
 
     def off(self):
         self._send("L=0")
+
+    def is_present(self) -> bool:
+        try:
+            res = self._send("IDN?")
+            return "CUBE" in res
+        except Exception:
+            return False
