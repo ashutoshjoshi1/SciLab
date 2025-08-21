@@ -36,7 +36,6 @@ class MeasureConfig:
     target_high: float = 65000.0
     it_min_ms: float = 0.2
     it_max_ms: float = 10000.0
-    # ✅ Explicit type annotation required for dataclass with field()
     start_it_ms: Dict[str, float] = field(
         default_factory=lambda: {"532": 1000.0, "517": 80.0, "default": 2.4}
     )
@@ -61,7 +60,6 @@ class AppConfig:
     measure: MeasureConfig = field(default_factory=MeasureConfig)
     output: OutputConfig = field(default_factory=OutputConfig)
 
-# A sane default config if no SciLab.yaml is provided
 DEFAULT_CONFIG = AppConfig(
     lasers=[
         LaserSpec(id="377", type="CUBE", power_mw=12, enabled=True),
@@ -92,8 +90,7 @@ def _from_dict(d: Dict[str, Any]) -> AppConfig:
     avantes = AvantesConfig(**d.get("avantes", {}))
     measure = MeasureConfig(**d.get("measure", {}))
     output  = OutputConfig(**d.get("output", {}))
-    lasers_in = d.get("lasers", []) or []
-    lasers  = [LaserSpec(**ld) for ld in lasers_in]
+    lasers  = [LaserSpec(**ld) for ld in d.get("lasers", [])]
     return AppConfig(serial=serial, avantes=avantes, lasers=lasers, measure=measure, output=output)
 
 def _to_dict(cfg: AppConfig) -> Dict[str, Any]:

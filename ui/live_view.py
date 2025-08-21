@@ -4,7 +4,6 @@ from PyQt5.QtCore import pyqtSlot
 import plotly.graph_objs as go
 import plotly.io as pio
 import numpy as np
-import tempfile
 
 class LiveView(QWidget):
     """Plotly in QWebEngineView for live spectrum display."""
@@ -21,9 +20,8 @@ class LiveView(QWidget):
 
     def _push_fig(self):
         html = pio.to_html(self._fig, full_html=True, include_plotlyjs="cdn")
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
-        tmp.write(html.encode("utf-8")); tmp.flush(); tmp.close()
-        self.web.load(f"file:///{tmp.name}")
+        # Directly set HTML (no QUrl / temp file needed)
+        self.web.setHtml(html)
 
     @pyqtSlot(object, float, float, str)
     def update_live(self, y: object, peak: float, it_ms: float, label: str):

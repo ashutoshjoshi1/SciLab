@@ -23,15 +23,11 @@ class AnalysisView(QWidget):
 
     def _set_fig(self, fig):
         html = pio.to_html(fig, full_html=True, include_plotlyjs="cdn")
-        from tempfile import NamedTemporaryFile
-        tmp = NamedTemporaryFile(delete=False, suffix=".html")
-        tmp.write(html.encode("utf-8")); tmp.flush(); tmp.close()
-        self.web.load(f"file:///{tmp.name}")
+        self.web.setHtml(html)
 
     def _pick_and_analyze(self):
         path, _ = QFileDialog.getOpenFileName(self, "Select frames.parquet", "", "Parquet (*.parquet)")
         if not path: return
         self.lbl.setText(path)
         res = analyze_run(path)
-        # Show resolution by default
         self._set_fig(res["figs"]["resolution"])
