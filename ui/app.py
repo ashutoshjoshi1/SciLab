@@ -29,7 +29,7 @@ class MeasureWorker(QObject):
 class MainWindow(QWidget):
     def __init__(self, cfg: AppConfig):
         super().__init__()
-        self.setWindowTitle("SciLab – Spectrometer Characterization")
+        self.setWindowTitle("SciLab")
         layout = QVBoxLayout(self)
         tabs = QTabWidget(self)
         layout.addWidget(tabs)
