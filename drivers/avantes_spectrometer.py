@@ -3,7 +3,7 @@
 #directly (see the __main__ section at the end of the file).
 #Written by Daniel Santana
 
-from spec_xfus import spec_clock, calc_msl
+from .spec_xfus import spec_clock, calc_msl
 import logging
 import ctypes
 from ctypes import windll,c_char,Structure,c_uint,c_byte,c_ushort,sizeof,byref,c_ubyte,c_float,c_uint8,c_uint16,c_uint32,c_double,c_bool,c_int
