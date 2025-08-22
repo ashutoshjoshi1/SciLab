@@ -4,6 +4,15 @@
 #Written by Daniel Santana
 
 from .spec_xfus import spec_clock, calc_msl
+
+import logging
+from typing import Optional
+
+try:
+    # Use the package default logger if available
+    from . import LOGGER as DEFAULT_LOGGER
+except Exception:
+    DEFAULT_LOGGER = logging.getLogger("SciLab.Avantes")
 import logging
 import ctypes
 from ctypes import windll,c_char,Structure,c_uint,c_byte,c_ushort,sizeof,byref,c_ubyte,c_float,c_uint8,c_uint16,c_uint32,c_double,c_bool,c_int
