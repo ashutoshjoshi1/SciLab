@@ -3,16 +3,7 @@
 #directly (see the __main__ section at the end of the file).
 #Written by Daniel Santana
 
-from .spec_xfus import spec_clock, calc_msl
-
-import logging
-from typing import Optional
-
-try:
-    # Use the package default logger if available
-    from . import LOGGER as DEFAULT_LOGGER
-except Exception:
-    DEFAULT_LOGGER = logging.getLogger("SciLab.Avantes")
+from spec_xfus import spec_clock, calc_msl
 import logging
 import ctypes
 from ctypes import windll,c_char,Structure,c_uint,c_byte,c_ushort,sizeof,byref,c_ubyte,c_float,c_uint8,c_uint16,c_uint32,c_double,c_bool,c_int
@@ -310,7 +301,7 @@ class Avantes_Spectrometer():
         self.dll_logging=False #(E) Set this to True to enable the internal logging of the dll. (Only for debugging purposes)
 
         #Avantes control DLL path
-        self.dll_path= os.path.abspath("../../lib/oslib/spec_ava1/Avaspec-DLL_9.14.0.9_64bits/avaspecx64.dll") #(E) Will store the path of the Avantes control dll (string)
+        self.dll_path= os.path.abspath("../../lib/oslib/spec_ava1/Avaspec-DLL_9.14.0.9_64bits/ava.dll") #(E) Will store the path of the Avantes control dll (string)
         #Spec Parameters:
         self.sn= "2203162U1" #"1102185U1" #(E) Serial number of the spectrometer to be used (string)
         self.alias="1" #(E) Alias of the spectrometer (string, just to identify the spec in the log files)

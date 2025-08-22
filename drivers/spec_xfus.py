@@ -1,7 +1,11 @@
+#Reduced xfus library for spectrometer lib's only.
+
 import time
 import sys
 import logging
 import numpy as np
+
+
 
 
 #create a module logger
@@ -168,3 +172,5 @@ class SpecClock:
 
 
 spec_clock=SpecClock()
+
+
