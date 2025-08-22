@@ -301,7 +301,7 @@ class Avantes_Spectrometer():
         self.dll_logging=False #(E) Set this to True to enable the internal logging of the dll. (Only for debugging purposes)
 
         #Avantes control DLL path
-        self.dll_path= os.path.abspath("../../lib/oslib/spec_ava1/Avaspec-DLL_9.14.0.9_64bits/ava.dll") #(E) Will store the path of the Avantes control dll (string)
+        self.dll_path= os.path.abspath("../../lib/oslib/spec_ava1/Avaspec-DLL_9.14.0.9_64bits/avaspecx64.dll") #(E) Will store the path of the Avantes control dll (string)
         #Spec Parameters:
         self.sn= "2203162U1" #"1102185U1" #(E) Serial number of the spectrometer to be used (string)
         self.alias="1" #(E) Alias of the spectrometer (string, just to identify the spec in the log files)

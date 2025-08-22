@@ -1,9 +1,7 @@
 from __future__ import annotations
-
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Union
-import yaml
-import os
+import yaml, os
 from pathlib import Path
 
 @dataclass
@@ -18,17 +16,18 @@ class SerialConfig:
 
 @dataclass
 class AvantesConfig:
-    dll_path: Optional[str] = None  # e.g., "C:/Program Files/Avantes/SDK/bin/avaspecx64.dll"
+    dll_path: Optional[str] = None
+    simulate: bool = False  # <-- NEW: run without hardware/DLL
 
 @dataclass
 class LaserSpec:
-    id: str                 # "377", "405", ...
-    type: str               # "CUBE", "OBIS", "RELAY"
+    id: str
+    type: str               # "CUBE" | "OBIS" | "RELAY"
     enabled: bool = True
-    channel: Optional[int] = None        # OBIS channel
-    power_w: Optional[float] = None      # OBIS
-    power_mw: Optional[float] = None     # CUBE
-    relay_channel: Optional[int] = None  # RELAY
+    channel: Optional[int] = None
+    power_w: Optional[float] = None
+    power_mw: Optional[float] = None
+    relay_channel: Optional[int] = None
 
 @dataclass
 class MeasureConfig:
@@ -36,9 +35,7 @@ class MeasureConfig:
     target_high: float = 65000.0
     it_min_ms: float = 0.2
     it_max_ms: float = 10000.0
-    start_it_ms: Dict[str, float] = field(
-        default_factory=lambda: {"532": 1000.0, "517": 80.0, "default": 2.4}
-    )
+    start_it_ms: Dict[str, float] = field(default_factory=lambda: {"532": 1000.0, "517": 80.0, "default": 2.4})
     step_up_ms: float = 0.3
     step_down_ms: float = 0.1
     max_adjust_iters: int = 300
@@ -65,7 +62,7 @@ DEFAULT_CONFIG = AppConfig(
         LaserSpec(id="377", type="CUBE", power_mw=12, enabled=True),
         LaserSpec(id="405", type="OBIS", channel=5, power_w=0.005, enabled=True),
         LaserSpec(id="445", type="OBIS", channel=4, power_w=0.003, enabled=True),
-        LaserSpec(id="488", type="OBIS", channel=3, power_w=0.03,  enabled=True),
+        LaserSpec(id="488", type="OBIS", channel=3, power_w=0.03, enabled=True),
         LaserSpec(id="517", type="RELAY", relay_channel=3, enabled=False),
         LaserSpec(id="532", type="RELAY", relay_channel=1, enabled=False),
     ]
@@ -86,7 +83,7 @@ def save_config(cfg: AppConfig, path: Union[str, os.PathLike]) -> None:
         yaml.safe_dump(_to_dict(cfg), f, sort_keys=False)
 
 def _from_dict(d: Dict[str, Any]) -> AppConfig:
-    serial = SerialConfig(**d.get("serial", {}))
+    serial  = SerialConfig(**d.get("serial", {}))
     avantes = AvantesConfig(**d.get("avantes", {}))
     measure = MeasureConfig(**d.get("measure", {}))
     output  = OutputConfig(**d.get("output", {}))
@@ -95,9 +92,9 @@ def _from_dict(d: Dict[str, Any]) -> AppConfig:
 
 def _to_dict(cfg: AppConfig) -> Dict[str, Any]:
     return {
-        "serial": vars(cfg.serial),
+        "serial":  vars(cfg.serial),
         "avantes": vars(cfg.avantes),
         "measure": vars(cfg.measure),
-        "output": vars(cfg.output),
+        "output":  vars(cfg.output),
         "lasers": [vars(l) for l in cfg.lasers],
     }
