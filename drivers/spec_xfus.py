@@ -4,8 +4,6 @@ import logging
 import numpy as np
 
 
-
-
 #create a module logger
 logger=logging.getLogger(__name__)
 
